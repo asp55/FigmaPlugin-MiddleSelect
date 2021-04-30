@@ -1,10 +1,16 @@
 {
-  "name": "SelectInstance",
+  "name": "Middle Select",
   "id": "970049232882206912",
   "api": "1.0.0",
   "main": "code.js",
   "menu": [
-    {"name": "Select Containing Instance", "command": "containing"},
-    {"name": "Select Outermost Instance", "command": "top"}
+    {"name": "Select Instance", "command": "containingInstance"},
+    {"name": "Select Outermost Instance", "command": "topInstance"},
+    {"separator": true},
+    {"name": "Select Frame", "command": "containingFrame"},
+    {"name": "Select Outermost Frame", "command": "topFrame"},
+    {"separator": true},
+    {"name": "Select Group", "command": "containingGroup"},
+    {"name": "Select Outermost Group", "command": "topGroup"}
   ]
 }

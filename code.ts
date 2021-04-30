@@ -1,45 +1,50 @@
 
 const command = figma.command;
 
-function getInstance(item:BaseNode):InstanceNode|null {
-  console.log("getInstance", item);
-  if(item.parent.type === "INSTANCE") {
-    return item.parent;
-  }
-  else if((item.parent as SceneNode).type) {
-    return getInstance(item.parent)
+function getContaining(item:SceneNode, targetType:string):SceneNode|null {
+  if(item.parent) {
+    if(item.parent.type === targetType) {
+      return item.parent as SceneNode;
+    }
+    else {
+      return getContaining(item.parent as SceneNode, targetType);
+    }
   }
   else return null;
 }
 
-function getOuterInstance(item:BaseNode):InstanceNode|null {
-  let outerInstance:InstanceNode|null = null;
-  if(item.type === "INSTANCE") {
-    outerInstance = item;
+function getTop(item:SceneNode, targetType:string):SceneNode|null {
+  console.log("Get Top",item, targetType);
+  let outerNode:SceneNode|null = null;
+  if(item.type === targetType) {
+    outerNode = item;
   }
   let checkItem = item;
   while(checkItem.parent) {
-    if(checkItem.parent.type === "INSTANCE") {
-      outerInstance = checkItem.parent;
+    if(checkItem.parent.type === targetType) {
+      outerNode = checkItem.parent as SceneNode;
     }
-    checkItem = checkItem.parent;
+    checkItem = checkItem.parent as SceneNode;
   }
-  return outerInstance;
-  
+  return outerNode;
 }
 
-let instances = [];
+let commandArgs = {
+  "containingInstance": {callback:getContaining, type:"INSTANCE"},
+  "topInstance": {callback:getTop, type:"INSTANCE"},
+  "containingFrame": {callback:getContaining, type:"FRAME"},
+  "topFrame": {callback:getTop, type:"FRAME"},
+  "containingGroup": {callback:getContaining, type:"GROUP"},
+  "topGroup": {callback:getTop, type:"GROUP"}
+}[command];
 
-if(command==="containing") {
-  instances = figma.currentPage.selection.map(selectedItem=>getInstance(selectedItem)).filter(val=>val!==null);
-  
+let selection = figma.currentPage.selection.map(selectedItem=>commandArgs.callback(selectedItem, commandArgs.type)).filter(val=>val!==null);
+
+if(selection.length>0) figma.currentPage.selection = selection;
+else {
+  console.log(`No ${commandArgs.type.toLowerCase()}s above selection`);
+  figma.notify(`Selection is not the child of any ${commandArgs.type.toLowerCase()}s.`);
 }
-else if(command==="top") {
-  instances = figma.currentPage.selection.map(selectedItem=>getOuterInstance(selectedItem)).filter(val=>val!==null);
-}
-
-figma.currentPage.selection = instances;
-
 // Make sure to close the plugin when you're done. Otherwise the plugin will
 // keep running, which shows the cancel button at the bottom of the screen.
 figma.closePlugin();
