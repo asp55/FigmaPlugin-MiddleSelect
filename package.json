@@ -1,0 +1,24 @@
+{
+  "name": "middleselect",
+  "version": "1.0.0",
+  "description": "Your Figma plugin",
+  "main": "code.js",
+  "scripts": {
+    "start": "tsc -w -p tsconfig.json",
+    "build": "tsc -p tsconfig.json"
+  },
+  "author": "Andrew S. Parnell",
+  "license": "MIT",
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.22.0"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asp55/FigmaPlugin-MiddleSelect.git"
+  },
+  "bugs": {
+    "url": "https://github.com/asp55/FigmaPlugin-MiddleSelect/issues"
+  },
+  "homepage": "https://github.com/asp55/FigmaPlugin-MiddleSelect#readme"
+}

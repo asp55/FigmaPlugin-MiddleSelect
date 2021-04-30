@@ -1,0 +1,10 @@
+{
+  "name": "SelectInstance",
+  "id": "970049232882206912",
+  "api": "1.0.0",
+  "main": "code.js",
+  "menu": [
+    {"name": "Select Containing Instance", "command": "containing"},
+    {"name": "Select Outermost Instance", "command": "top"}
+  ]
+}
